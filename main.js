@@ -298,7 +298,6 @@ function isBigSpender(transaction) {
   }
 }
 
-
 console.log( 'The "big spenders" are:', bigSpenders );
 
 
@@ -311,6 +310,20 @@ console.log( 'The "big spenders" are:', bigSpenders );
   HINT(S):
   - Transactions don't have 'prices', but their 'items' do!
 */
+
+ var sale = transactions.filter(isSale);
+ var items = sale[0]['items'];
+
+ var sumSales = items.reduce(function(sum, item) {
+   return sum + item['price'];
+ }, 0);
+
+ function isSale(transaction) {
+   if (transaction.type === 'sale') {
+     return true;
+   }
+ }
+
 var sumSales;
 
 console.log( 'The sum of all sales is:', sumSales );
@@ -319,17 +332,28 @@ console.log( 'The sum of all sales is:', sumSales );
 // --------------------------------------------------
 // QUESTION 09
 // --------------------------------------------------
-/*
-  Calculate the sum of *all* 'purchase' transactions.
 
-  HINT(S):
-  - Your solution to 'QUESTION 08' is a good starting point!
-  - Make sure to include 'price' information from *all* purchases.
-*/
 
-var sumPurchases;
+var sumPurchases = isPurchase(transactions).reduce(function(sum, value) {
+  return sum + value
+}, 0);
+
+
+function isPurchase(transaction) {
+  var purchases = [];
+  for (var i = 0; i < transactions.length; i++) {
+    if (transactions[i].type === 'purchase') {
+      for (var x = 0; x < transactions[x].items.length; x++) {
+        purchases.push(transactions[i].items[x].price);
+      }
+    }
+  }
+    return purchases;
+}
 
 console.log( 'The sum of all purhcases is:', sumPurchases );
+
+
 
 
 // --------------------------------------------------
