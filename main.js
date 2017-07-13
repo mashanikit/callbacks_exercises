@@ -339,7 +339,7 @@ var sumPurchases = isPurchase(transactions).reduce(function(sum, value) {
 }, 0);
 
 
-function isPurchase(transaction) {
+function isPurchase(transactions) {
   var purchases = [];
   for (var i = 0; i < transactions.length; i++) {
     if (transactions[i].type === 'purchase') {
@@ -369,7 +369,40 @@ console.log( 'The sum of all purhcases is:', sumPurchases );
   HINT(S):
   - Unlike 'QUESTION 08' and 'QUESTION 09', here we're interested in both 'sale' and 'purchase' transactions.
 */
-var netProfit;
+
+var sumPurchases = isPurchase(transactions).reduce(function(sum, value) {
+  return sum + value
+}, 0);
+
+function isPurchase(transactions) {
+  var purchases = [];
+  for (var i = 0; i < transactions.length; i++) {
+    if (transactions[i].type === 'purchase') {
+      for (var x = 0; x < transactions[x].items.length; x++) {
+        purchases.push(transactions[i].items[x].price);
+      }
+    }
+  }
+    return purchases;
+}
+
+var totalSales = isSale(transactions).reduce(function(sum, value) {
+  return sum + value;
+}, 0);
+
+function isSale(transactions) {
+  var sales = [];
+  for (var x = 0; x < transactions.length; x++) {
+  if (transactions[x].type === 'sale') {
+    for (var i = 0; i < transactions[x].items.length; i++) {
+      sales.push(transactions[x].items[i].price);
+    }
+  }
+}
+  return sales;
+}
+
+var netProfit = totalSales + sumPurchases;
 
 console.log( 'The net profit is:', netProfit );
 
@@ -383,7 +416,16 @@ console.log( 'The net profit is:', netProfit );
   HINTS:
   - The result of this calculation should be a number (not an array, object, or other data type).
 */
-var mostItems;
+
+function greaterItems(high, transaction) {
+  var numItems = transaction['items'].length;
+  if (numItems > high) {
+    return numItems;
+  } else {
+    return high
+  }
+}
+var mostItems = transactions.reduce(greaterItems, 0);
 
 console.log( 'The most items sold in a single transaction is:', mostItems );
 
@@ -394,6 +436,3 @@ console.log( 'The most items sold in a single transaction is:', mostItems );
 /*
   Calculate the sum of the 'purchase' with the fewest items.
 */
-var sumOfSmallestPurchase;
-
-console.log( 'The sum of the smallest purchase is:', sumOfSmallestPurchase );
